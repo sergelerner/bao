@@ -1,6 +1,6 @@
-var React     = require('react');
+var React     = require("react");
 var Reflux    = require("reflux");
-var MainStore = require("../stores/main-store");
+var MainStore = require("../stores/main-store.js");
 
 var Main = React.createClass({
 
@@ -10,15 +10,48 @@ var Main = React.createClass({
                        
     },
 
-    initialCallback: function(data) {   
-    	this.setState(data)
+    initialCallback: function(data) {      	
+    	this.setState(data);
     },  
 
-    createTemplae: function() {
+    createTable: function() {    	
     	if (this.state === null) return;
+
+    	var th = this.state.tableData.headers.map(function(item) {
+    		return (<th>{item}</th>);
+    	});
+
+    	var rows = this.state.tableData.rows.map(function(row, i) {
+
+            var rowData = row.map(function(data, j) {                                            
+            	return (<td>{data}</td>)
+            }, this);
+
+            return (
+                <tr>
+                    {rowData}
+                </tr>
+            );
+
+        }, this);
+
+
+
     	var template = (
 			<div ref="mainComponent" className="maincomp">
-				<h1>{this.state.title}</h1>	
+				<table>
+
+					<thead>
+						<tr>
+							{th}
+						</tr>
+					</thead>
+
+					<tbody>
+						{rows}
+					</tbody>										
+					
+				</table>
 			</div>
 		)
       
@@ -26,10 +59,9 @@ var Main = React.createClass({
     },
 
 	render: function() {
-
 		return (
 			<div>		
-				
+				{this.createTable()}
 			</div>
 		);
 	}
