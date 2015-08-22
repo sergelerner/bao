@@ -18,8 +18,15 @@ var RequestStore = Reflux.createStore({
     listenables: [Actions],
 
     init: function() {
-        this.dummyData = this.generateDummyData(400);
-        var tableData  = this.createTableData(this.dummyData);
+        var dummyData  = this.generateDummyData(400);
+        var tableData  = this.createTableData(dummyData);
+
+        this.state.tableData = tableData;
+
+        this.trigger(this.state);
+
+        console.log("dummyData", dummyData);
+        console.log("tableData", tableData);
     },
 
     generateDummyData: function(itemsInteger) {
@@ -33,7 +40,16 @@ var RequestStore = Reflux.createStore({
                 d: x,
                 e: x,
                 f: x,
-                g: x
+                g: x,
+                h: x,
+                i: x,
+                j: x,
+                k: x,
+                l: x,
+                m: x,
+                n: x,
+                o: x, 
+                p: x
             })
         }
 
@@ -54,7 +70,7 @@ var RequestStore = Reflux.createStore({
             for (var prop in item) {
                 row.push(item[prop]);
             }
-            rows.push(row);
+            return row;
         });
 
         return {
