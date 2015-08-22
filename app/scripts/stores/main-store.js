@@ -18,7 +18,7 @@ var RequestStore = Reflux.createStore({
     listenables: [Actions],
 
     init: function() {
-        var dummyData  = this.generateDummyData(400);
+        var dummyData  = this.generateDummyData(10);
         var tableData  = this.createTableData(dummyData);
 
         this.state.tableData = tableData;
@@ -84,8 +84,8 @@ var RequestStore = Reflux.createStore({
         return this.state;
     },
 
-    someAction: function() {
-
+    clickOnCell: function(e) {
+        console.log("clickOnCell", e);
     }
 });
 

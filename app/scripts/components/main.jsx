@@ -1,5 +1,6 @@
 var React     = require("react");
 var Reflux    = require("reflux");
+var Actions   = require("../actions/actions");
 var MainStore = require("../stores/main-store.js");
 
 var Main = React.createClass({
@@ -14,7 +15,13 @@ var Main = React.createClass({
     	this.setState(data);
     },  
 
-    createTable: function() {    	
+    handleCellClick: function(item) {   
+        console.log("item", item)     
+        Actions.clickOnCell(item);
+    },
+
+    createTable: function() {   
+        console.time("createTable"); 	
     	if (this.state === null) return;
 
     	var th = this.state.tableData.headers.map(function(item) {
@@ -24,7 +31,7 @@ var Main = React.createClass({
     	var rows = this.state.tableData.rows.map(function(row, i) {
 
             var rowData = row.map(function(data, j) {                                            
-            	return (<td>{data}</td>)
+            	return (<td onClick={this.handleCellClick.bind(null, data)}>{data}</td>)
             }, this);
 
             return (
@@ -53,7 +60,9 @@ var Main = React.createClass({
 					
 				</table>
 			</div>
-		)
+		)        
+
+        console.timeEnd("createTable");
       
       	return (this.state.isRender === true) ? template : null;
     },
@@ -64,6 +73,7 @@ var Main = React.createClass({
 				{this.createTable()}
 			</div>
 		);
+        
 	}
 });
 
