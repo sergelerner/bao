@@ -1,4 +1,5 @@
 var Reflux    = require("reflux");
+var Backend   = require("../backend.js");
 var Actions   = require("../actions/actions");
 
 var RequestStore = Reflux.createStore({
@@ -30,6 +31,20 @@ var RequestStore = Reflux.createStore({
     },
 
     generateDummyData: function(itemsInteger) {
+
+        console.log("Backend", Backend);
+
+        var backendData = Backend.getRandomData(50);
+
+        if (Promise.resolve(backendData) === backendData) {
+
+            backendData
+                .then(function(data) {
+                    console.log("WE GO PROMISE DATA", data);
+                });
+
+        }
+
         var data = [];
 
         for (var x = 0; x < itemsInteger; x++) {
