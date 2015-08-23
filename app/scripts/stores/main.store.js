@@ -6,6 +6,8 @@ var _              = require("lodash");
 
 var RequestStore = Reflux.createStore({
 
+    number: 800,
+
     flatMap: null,
 
     state: {
@@ -19,13 +21,17 @@ var RequestStore = Reflux.createStore({
 
         this.listenTo(SelectionStore, this.listenSelectionStore);
 
-        var dummyData  = Backend.getRandomData(800);
+        console.time("getRandomData");                
+
+        var dummyData  = Backend.getRandomData(this.number);
         var tableData  = null;
 
         if (Promise.resolve(dummyData) === dummyData) {
 
             dummyData
-                .then(function(collection) {    
+                .then(function(collection) { 
+                    console.timeEnd("getRandomData");  
+                    console.log("AJAX", this.number, " Items"); 
                     var flatMap   = this.flatMap(collection);
                     var tableData = this.createTableData(flatMap);  
                     
@@ -54,7 +60,7 @@ var RequestStore = Reflux.createStore({
         var headers = [];
         var rows    = [];
 
-        for (var id in flatMap) {            
+        for (var id in flatMap) { 
             headers = _.keys(_.omit(flatMap[id], "id", "isSelected"));
             break;
         }
@@ -97,7 +103,6 @@ var RequestStore = Reflux.createStore({
 
     ////////////////////////////////////////////////////////////
     
-
     listenSelectionStore: function(selectionArray) { 
 
         console.log("%c on select", "background: tomato");

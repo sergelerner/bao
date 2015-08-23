@@ -30,8 +30,6 @@ var Main = React.createClass({
 
     handleCheckAll: function(e) {        
 
-        Actions.deselectAll();
-
         if (e.target.checked === true) {            
             Actions.select(this.state.tableData.rows);
         } else {
@@ -47,7 +45,7 @@ var Main = React.createClass({
 
             table: function() {
 
-                var th = this.state.tableData.headers.map(function(item) {
+                var th = this.state.tableData.headers.map(function(item, i) {
                     return (<th>{item}</th>);
                 });
 
