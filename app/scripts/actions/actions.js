@@ -1,7 +1,10 @@
 var Reflux    = require("reflux");
 
 var Actions = Reflux.createActions({
-    "clickOnCell"    : {},
+	"select"         : {},
+	"deselect"       : {},
+	"deselectAll"    : {},
+	"clickOnCell"    : {},
 });
 
 

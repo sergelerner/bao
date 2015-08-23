@@ -1,7 +1,8 @@
-var Reflux    = require("reflux");
-var Backend   = require("../backend.js");
-var Actions   = require("../actions/actions");
-var _         = require("lodash");
+var Reflux         = require("reflux");
+var Backend        = require("../backend.js");
+var SelectionStore = require("./selection.store");
+var Actions        = require("../actions/actions");
+var _              = require("lodash");
 
 var RequestStore = Reflux.createStore({
 
@@ -32,6 +33,9 @@ var RequestStore = Reflux.createStore({
     listenables: [Actions],
 
     init: function() {
+
+        this.listenTo(SelectionStore, this.listenSelectionStore);
+
         var dummyData  = Backend.getRandomData(200);
         var tableData  = null;
 
@@ -42,6 +46,7 @@ var RequestStore = Reflux.createStore({
                     var flatMap   = this.flatMap(collection);
                     var tableData = this.createTableData(flatMap);  
                     
+                    this.flatMap         = flatMap;
                     this.state.isRender  = true;
                     this.state.tableData = tableData; 
 
@@ -58,10 +63,10 @@ var RequestStore = Reflux.createStore({
             });
         }
 
-        return _.map(_.indexBy(collection, "id"), _extendItam);
+        return _.indexBy(_.map(collection, _extendItam), "id");
     },
 
-    createTableData: function(flatMap) {  
+    createTableData: function(flatMap) {
 
         var headers = [];
         var rows    = [];
@@ -86,16 +91,43 @@ var RequestStore = Reflux.createStore({
             headers: headers,
             rows: rows
         }
-
     },
 
     getInitialState: function() {
         return this.state;
     },
 
-    clickOnCell: function(e) {
-        console.log("clickOnCell", e);
+    handleSelection: function(selectionArray, flatMap) {
+
+        _.forOwn(flatMap, function(value, key) {
+            value.isSelected = false;
+        });
+
+        if (selectionArray.length === 0) return flatMap;
+
+        selectionArray.forEach(function(item) {
+            flatMap[item.id].isSelected = !item.isSelected;
+        }, this);
+
+        return flatMap;
+    },
+
+    ////////////////////////////////////////////////////////////
+    
+
+    listenSelectionStore: function(selectionArray) {        
+        var flatMap   = this.handleSelection(selectionArray, this.flatMap);
+        var tableData = this.createTableData(flatMap); 
+
+        this.flatMap         = flatMap;   
+        this.state.tableData = tableData;   
+        this.trigger(this.state);
+    },
+
+    clickOnCell: function(item) {
+        console.log("clickOnCell", item);
     }
+
 });
 
 module.exports = RequestStore;

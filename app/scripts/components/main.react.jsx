@@ -15,9 +15,27 @@ var Main = React.createClass({
     	this.setState(data);
     },  
 
-    handleCellClick: function(item) {   
-        console.log("item", item)     
-        Actions.clickOnCell(item);
+    handleCellClick: function(item) {  
+        Actions.deselectAll();         
+        Actions.select([item]);
+    },
+
+    handleCheck: function(item) {
+        if (item.isSelected === true) {
+            Actions.deselect([item]);
+        } else {
+            Actions.select([item]);
+        }
+    },
+
+    handleCheckAll: function(e) {
+        console.log("e", e.target.checked);
+
+        if (e.target.checked === true) {
+            Actions.select(this.state.tableData.rows);
+        } else {
+            Actions.deselectAll();
+        }        
     },
 
     createTable: function() {   
@@ -31,13 +49,13 @@ var Main = React.createClass({
     	var rows = this.state.tableData.rows.map(function(row, i) {
 
             var rowData = row.row.map(function(data, j) {                                            
-            	return (<td onClick={this.handleCellClick.bind(null, data)}>{data}</td>)
+            	return (<td onClick={this.handleCellClick.bind(null, row)}>{data}</td>)
             }, this);
 
             return (
-                <tr>
+                <tr className={(row.isSelected === true) ? "selected" : ""}>
                     <td>
-                        <input type="checkbox"/>
+                        <input type="checkbox" onChange={this.handleCheck.bind(null, row)}/>
                     </td>
                     {rowData}
                 </tr>
@@ -54,7 +72,7 @@ var Main = React.createClass({
 					<thead>
 						<tr>
                             <th>
-                                <input type="checkbox"/>
+                                <input type="checkbox" onClick={this.handleCheckAll}/>
                             </th>
 							{th}
 						</tr>

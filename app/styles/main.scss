@@ -2,6 +2,7 @@ $border-color: #EFE7BE;
 $bg-color: #002635;
 $text-color: #DBD4AE;
 $thumb-color: #91161F;
+$selected-color: tomato;
 
 body {
     background: $bg-color;
@@ -27,6 +28,11 @@ table, th, td {
 
 th, td {
     padding: 5px 15px;
+}
+
+tr.selected {
+    background: $selected-color;
+    color: $bg-color;
 }
 
 .maincomp {
