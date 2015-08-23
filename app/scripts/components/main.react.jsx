@@ -43,54 +43,68 @@ var Main = React.createClass({
         console.time("createTable"); 	
     	if (this.state === null) return;
 
-    	var th = this.state.tableData.headers.map(function(item) {
-    		return (<th>{item}</th>);
-    	});
+        var template = {
 
-    	var rows = this.state.tableData.rows.map(function(row, i) {
+            table: function() {
 
-            var rowData = row.row.map(function(data, j) {                                            
-            	return (<td onClick={this.handleCellClick.bind(null, row)}>{data}</td>)
-            }, this);
+                var th = this.state.tableData.headers.map(function(item) {
+                    return (<th>{item}</th>);
+                });
 
-            return (
-                <tr className={(row.isSelected === true) ? "selected" : ""}>
-                    <td>
-                        <input type="checkbox" checked={row.isSelected} onChange={this.handleCheck.bind(null, row)}/>
-                    </td>
-                    {rowData}
-                </tr>
-            );
+                var rows = this.state.tableData.rows.map(function(row, i) {
 
-        }, this);
+                    var rowData = row.row.map(function(data, j) {                                            
+                        return (<td onClick={this.handleCellClick.bind(null, row)}>{data}</td>)
+                    }, this);
 
+                    return (
+                        <tr className={(row.isSelected === true) ? "selected" : ""}>
+                            <td>
+                                <input type="checkbox" checked={row.isSelected} onChange={this.handleCheck.bind(null, row)}/>
+                            </td>
+                            {rowData}
+                        </tr>
+                    );
+                }, this);
 
+                return (
+                    <div ref="mainComponent" className="maincomp">
+                        <table>
 
-    	var template = (
-			<div ref="mainComponent" className="maincomp">
-				<table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" onClick={this.handleCheckAll}/>
+                                    </th>
+                                    {th}
+                                </tr>
+                            </thead>
 
-					<thead>
-						<tr>
-                            <th>
-                                <input type="checkbox" onClick={this.handleCheckAll}/>
-                            </th>
-							{th}
-						</tr>
-					</thead>
+                            <tbody>
+                                {rows}
+                            </tbody>                                        
+                            
+                        </table>
+                    </div>
+                )
 
-					<tbody>
-						{rows}
-					</tbody>										
-					
-				</table>
-			</div>
-		)        
+            },
+
+            spinner: function() {
+                return ( 
+                    <div className="spinner">
+                        <div className="pong-loader"></div> 
+                    </div>                    
+                );
+            }
+        }
+
 
         console.timeEnd("createTable");
         console.log("-----------------------------");
       
-      	return (this.state.isRender === true) ? template : null;
+      	return (this.state.isRender === true && this.state.isWaiting) ? template["spinner"].call(this) : 
+               (this.state.isRender === true) ? template["table"].call(this) : null;
     },
 
 	render: function() {

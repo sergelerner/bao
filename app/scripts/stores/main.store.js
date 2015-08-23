@@ -6,28 +6,11 @@ var _              = require("lodash");
 
 var RequestStore = Reflux.createStore({
 
+    flatMap: null,
+
     state: {
-        isRender: false,
-        tableData: {
-            headers: ["one", "two", "thre"],
-            rows: [
-                {
-                    id: "1",
-                    isSelected: false,
-                    row: [1, 2, 3]
-                },
-                {
-                    id: "2",
-                    isSelected: false,
-                    row: [2, 3, 4]
-                },
-                {
-                    id: "3",
-                    isSelected: false,
-                    row: [5, 6, 7]
-                },                            
-            ]
-        }
+        isRender: true,
+        isWaiting: true        
     },
 
     listenables: [Actions],
@@ -47,7 +30,7 @@ var RequestStore = Reflux.createStore({
                     var tableData = this.createTableData(flatMap);  
                     
                     this.flatMap         = flatMap;
-                    this.state.isRender  = true;
+                    this.state.isWaiting = false;
                     this.state.tableData = tableData; 
 
                     this.trigger(this.state);
@@ -99,6 +82,8 @@ var RequestStore = Reflux.createStore({
 
     handleSelection: function(selectionArray, flatMap) {
 
+        console.time("handleSelection"); 
+
         _.forOwn(flatMap, function(value, key) {
             value.isSelected = false;
         });
@@ -108,6 +93,8 @@ var RequestStore = Reflux.createStore({
         selectionArray.forEach(function(item) {
             flatMap[item.id].isSelected = !item.isSelected;
         }, this);
+
+        console.timeEnd("handleSelection");
 
         return flatMap;
     },
