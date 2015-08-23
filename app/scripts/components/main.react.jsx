@@ -1,14 +1,14 @@
 var React     = require("react");
 var Reflux    = require("reflux");
 var Actions   = require("../actions/actions");
-var MainStore = require("../stores/main-store.js");
+var MainStore = require("../stores/main.store.js");
 
 var Main = React.createClass({
 
 	mixins: [Reflux.listenTo(MainStore, "onChangeCallback", "initialCallback")],
   
     onChangeCallback: function(data) {
-                       
+       this.setState(data);
     },
 
     initialCallback: function(data) {      	
@@ -30,12 +30,15 @@ var Main = React.createClass({
 
     	var rows = this.state.tableData.rows.map(function(row, i) {
 
-            var rowData = row.map(function(data, j) {                                            
+            var rowData = row.row.map(function(data, j) {                                            
             	return (<td onClick={this.handleCellClick.bind(null, data)}>{data}</td>)
             }, this);
 
             return (
                 <tr>
+                    <td>
+                        <input type="checkbox"/>
+                    </td>
                     {rowData}
                 </tr>
             );
@@ -50,6 +53,9 @@ var Main = React.createClass({
 
 					<thead>
 						<tr>
+                            <th>
+                                <input type="checkbox"/>
+                            </th>
 							{th}
 						</tr>
 					</thead>

@@ -7,13 +7,13 @@ var Backend = (function() {
 
 			var request = new XMLHttpRequest();
 
-			request.open("GET", "http://www.filltext.com?rows="+amount+"&f={firstName}", true);
+			request.open("GET", "http://www.filltext.com?rows="+amount+"&id={randomString}&fname={firstName}&lname={lastName}&company={business}&city={city}&address={streetAddress}&email={email}&ip={ip}", true);
 
 			request.onreadystatechange = function () {
 
 				request.onload = function() {
 					if (request.status == 200) {
-						resolve(request.response); // we got data here, so resolve the Promise
+						resolve(JSON.parse(request.response)); // we got data here, so resolve the Promise
 					} else {
 						reject(Error(request.statusText)); // status is not 200 OK, so reject
 					}
