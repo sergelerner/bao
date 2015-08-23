@@ -36,7 +36,7 @@ var RequestStore = Reflux.createStore({
 
         this.listenTo(SelectionStore, this.listenSelectionStore);
 
-        var dummyData  = Backend.getRandomData(200);
+        var dummyData  = Backend.getRandomData(400);
         var tableData  = null;
 
         if (Promise.resolve(dummyData) === dummyData) {

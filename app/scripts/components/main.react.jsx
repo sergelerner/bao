@@ -28,10 +28,11 @@ var Main = React.createClass({
         }
     },
 
-    handleCheckAll: function(e) {
-        console.log("e", e.target.checked);
+    handleCheckAll: function(e) {        
 
-        if (e.target.checked === true) {
+        Actions.deselectAll();
+
+        if (e.target.checked === true) {            
             Actions.select(this.state.tableData.rows);
         } else {
             Actions.deselectAll();
@@ -55,7 +56,7 @@ var Main = React.createClass({
             return (
                 <tr className={(row.isSelected === true) ? "selected" : ""}>
                     <td>
-                        <input type="checkbox" onChange={this.handleCheck.bind(null, row)}/>
+                        <input type="checkbox" checked={row.isSelected} onChange={this.handleCheck.bind(null, row)}/>
                     </td>
                     {rowData}
                 </tr>
@@ -87,6 +88,7 @@ var Main = React.createClass({
 		)        
 
         console.timeEnd("createTable");
+        console.log("-----------------------------");
       
       	return (this.state.isRender === true) ? template : null;
     },
