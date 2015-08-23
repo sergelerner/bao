@@ -19,7 +19,7 @@ var RequestStore = Reflux.createStore({
 
         this.listenTo(SelectionStore, this.listenSelectionStore);
 
-        var dummyData  = Backend.getRandomData(400);
+        var dummyData  = Backend.getRandomData(800);
         var tableData  = null;
 
         if (Promise.resolve(dummyData) === dummyData) {
@@ -80,9 +80,7 @@ var RequestStore = Reflux.createStore({
         return this.state;
     },
 
-    handleSelection: function(selectionArray, flatMap) {
-
-        console.time("handleSelection"); 
+    handleSelection: function(selectionArray, flatMap) {        
 
         _.forOwn(flatMap, function(value, key) {
             value.isSelected = false;
@@ -92,9 +90,7 @@ var RequestStore = Reflux.createStore({
 
         selectionArray.forEach(function(item) {
             flatMap[item.id].isSelected = !item.isSelected;
-        }, this);
-
-        console.timeEnd("handleSelection");
+        }, this);        
 
         return flatMap;
     },
@@ -102,13 +98,21 @@ var RequestStore = Reflux.createStore({
     ////////////////////////////////////////////////////////////
     
 
-    listenSelectionStore: function(selectionArray) {        
+    listenSelectionStore: function(selectionArray) { 
+
+        console.log("%c on select", "background: tomato");
+        
+        console.time("handleSelection");        
         var flatMap   = this.handleSelection(selectionArray, this.flatMap);
+        console.timeEnd("handleSelection");
+
+        console.time("createTableData");        
         var tableData = this.createTableData(flatMap); 
+        console.timeEnd("createTableData");
 
         this.flatMap         = flatMap;   
         this.state.tableData = tableData;   
-        this.trigger(this.state);
+        this.trigger(this.state);        
     },
 
     clickOnCell: function(item) {

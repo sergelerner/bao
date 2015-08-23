@@ -40,7 +40,7 @@ var Main = React.createClass({
     },
 
     createTable: function() {   
-        console.time("createTable"); 	
+        	
     	if (this.state === null) return;
 
         var template = {
@@ -97,24 +97,28 @@ var Main = React.createClass({
                     </div>                    
                 );
             }
-        }
-
-
-        console.timeEnd("createTable");
-        console.log("-----------------------------");
+        }        
       
-      	return (this.state.isRender === true && this.state.isWaiting) ? template["spinner"].call(this) : 
-               (this.state.isRender === true) ? template["table"].call(this) : null;
+      	var result = (this.state.isRender === true && this.state.isWaiting) ? template["spinner"].call(this) : 
+                     (this.state.isRender === true) ? template["table"].call(this) : null;
+        
+        return result;
     },
 
-	render: function() {
-		return (
-			<div>		
-				{this.createTable()}
-			</div>
-		);
+    render: function() {
+        console.time("createTable"); 
+        return (
+            <div>       
+                {this.createTable()}
+            </div>
+        );
         
-	}
+    },
+
+    componentDidUpdate: function() {
+        console.timeEnd("createTable");
+        console.log("-----------------------------");
+    }
 });
 
 module.exports = Main;
